@@ -1,0 +1,22 @@
+version: "3.9"
+
+services:
+  couchbase-server:
+    image: couchbase/server:7.2.6
+    container_name: couchbase-server
+    ports:
+      - "8091-8096:8091-8096"
+      - "11210:11210"
+      - "18091-18096:18091-18096"
+    environment:
+      CB_USERNAME: Administrator
+      CB_PASSWORD: password
+    volumes:
+      - couchbase_data:/opt/couchbase/var
+      - ./couchbase/init:/opt/couchbase/init
+    entrypoint: ["/opt/couchbase/init/01-init.sh"]
+    # For local dev this is a sensible default; you can remove it if you prefer
+    restart: unless-stopped
+
+volumes:
+  couchbase_data:
